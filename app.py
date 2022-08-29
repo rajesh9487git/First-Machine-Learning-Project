@@ -1,7 +1,9 @@
-from flask import Flask
+from flask import Flask, request
 from housing.logger import logging
 from housing.exception import HousingException
 import sys
+
+
 
 
 
@@ -18,6 +20,8 @@ def index():
 
     logging.info("we are testing logging module")
     return "Starting Machine Learning Project"
+    
+   
     
 
 

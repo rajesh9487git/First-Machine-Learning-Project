@@ -1,5 +1,4 @@
-from housing.entity.config_entity import DataIngestionConfig, DataTransformationConfig,DataValidationConfig, /
-ModelTrainerConfig,ModelEvaluationConfig,ModelPusherConfig,TrainingPipelineConfig
+from housing.entity.config_entity import DataIngestionConfig, DataTransformationConfig,DataValidationConfig,ModelTrainerConfig,ModelEvaluationConfig,ModelPusherConfig,TrainingPipelineConfig
 
 from housing.util.util import read_yaml_file
 from housing.exception import HousingException
@@ -23,8 +22,17 @@ class Configuration:
         raise HousingException(e, sys)  from e 
         
 
-    def get_data_ingestion_config(self):
-        pass
+    def get_data_ingestion_config(self)-> DataIngestionConfig:
+        
+        try:
+            artifact_dir = self.training_pipeline_config.artifact_dir
+            data_ingestion_artifact_dir= os.path.join(
+                artifact_dir, 
+                DATA
+            )
+
+
+        
 
     def get_data_validation_config(self):
         pass
@@ -52,6 +60,7 @@ class Configuration:
             training_pipeline_config= TrainingPipelineConfig(artifact_dir=artifact_dir)
             logging.info(f"Training pipeline config:{training_pipeline_config}")
             return training_pipeline_config
+            
 
         except Exception as e:
             raise HousingException(e, sys) from e  
