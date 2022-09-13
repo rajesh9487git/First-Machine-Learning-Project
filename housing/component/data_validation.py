@@ -1,8 +1,9 @@
 from housing.exception import HousingException
 import os,sys
 from housing.logger import logging
-from housing.entity.config_entity import DataValidationConfig
+from housing.entity.config_entity import DataValidationConfig, DataIngestionConfig
 from housing.entity.artifact_entity import DataIngestionArtifact, DataValidationArtifact
+import pandas as pd
 
 
 class DataVaidation():
@@ -73,8 +74,84 @@ class DataVaidation():
             # NEAR OCEAN
             #3. Check column names
 
+            data_ingestion_config= DataIngestionConfig
+            original_dataset_df=pd.read_csv(data_ingestion_config.raw_data_dir)
+            train_df = pd.read_csv(self.data_ingestion_artifact.train_file_path)
+            test_df = pd.read_csv(self.data_ingestion_artifact.test_file_path)
 
-            validation_status = True
+            # validating the column count
+
+            df_columns_count=original_dataset_df.shape[1]
+            train_columns_count=train_df.shape[1]
+            test_columns_count=test_df.shape[1]
+
+            is_train_column_count_correct=False
+            is_test_column_count_correct=False
+            is_column_count_correct= False
+
+
+
+
+            if df_columns_count==train_columns_count:
+                is_train_column_count_correct=True
+            
+
+
+            if df_columns_count==test_columns_count:
+                is_test_column_count_correct=True
+              
+
+
+            is_column_count_correct= is_train_column_count_correct and is_test_column_count_correct
+
+
+            # checking the value of ocean proximity
+            
+            original_ocean_proximity= original_dataset_df.ocean_proximity.unique()
+            set_of_original_ocean_proximity= set(original_ocean_proximity) 
+
+            train_ocean_proximity= train_df.ocean_proximity.unique()
+            set_of_train_ocean_proximity= set(train_ocean_proximity) 
+
+            test_ocean_proximity= test_df.ocean_proximity.unique()
+            set_of_test_ocean_proximity= set(test_ocean_proximity) 
+
+            is_column_value_correct= False
+            is_train_column_value_correct= False
+            is_test_column_value_correct= False
+
+
+            if set_of_original_ocean_proximity==set_of_train_ocean_proximity:
+                is_train_column_value_correct= True
+
+            if set_of_original_ocean_proximity==set_of_test_ocean_proximity:
+                is_test_column_value_correct= True    
+
+
+            is_column_value_correct = is_train_column_value_correct and  is_test_column_value_correct
+
+            # validating the column names
+
+            original_column_names= original_dataset_df.columns
+            train_column_names = train_df.columns
+            test_column_names= test_df.columns
+
+            is_column_names_correct= False
+            is_train_column_names_correct= False
+            is_test_column_names_correct= False
+
+            if original_column_names == train_column_names:
+                is_train_column_names_correct= True
+
+            if original_column_names == test_column_names:
+                is_test_column_names_correct= True   
+
+
+            is_column_names_correct = is_train_column_names_correct and is_test_column_names_correct
+
+            validation_status = is_column_count_correct and is_column_value_correct and is_column_names_correct
+
+            #validation_status = True
             return validation_status 
         except Exception as e:
             raise HousingException(e,sys) from e
