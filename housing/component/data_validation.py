@@ -151,6 +151,13 @@ class DataVaidation():
 
             validation_status = is_column_count_correct and is_column_value_correct and is_column_names_correct
 
+            logging.info(f"The result of schema validation is : [{validation_status}]")
+
+            if validation_status == False:
+                raise Exception("Schema of Train dataset or Test dataset is wrong")
+
+
+
             #validation_status = True
             return validation_status 
         except Exception as e:
