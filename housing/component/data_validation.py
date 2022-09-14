@@ -149,6 +149,8 @@ class DataVaidation():
 
             is_column_names_correct = is_train_column_names_correct and is_test_column_names_correct
 
+            logging.info(f"is_column_count_correct: [{is_column_count_correct}],is_column_value_correct: [{is_column_value_correct}], is_column_names_correct :[{is_column_names_correct}] ")
+
             validation_status = is_column_count_correct and is_column_value_correct and is_column_names_correct
 
             logging.info(f"The result of schema validation is : [{validation_status}]")
