@@ -140,10 +140,10 @@ class DataVaidation():
             is_train_column_names_correct= False
             is_test_column_names_correct= False
 
-            if original_column_names == train_column_names:
+            if list(original_column_names) == list(train_column_names):
                 is_train_column_names_correct= True
 
-            if original_column_names == test_column_names:
+            if list(original_column_names) == list(test_column_names):
                 is_test_column_names_correct= True   
 
 
