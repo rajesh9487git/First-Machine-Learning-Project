@@ -4,6 +4,11 @@ from housing.logger import logging
 from housing.entity.config_entity import DataValidationConfig, DataIngestionConfig
 from housing.entity.artifact_entity import DataIngestionArtifact, DataValidationArtifact
 import pandas as pd
+from evidently.model_profile import Profile
+from evidently.model_profile.sections import DataDriftProfileSection
+from evidently.dashboard import Dashboard
+from evidently.dashboard.tabs import DataDriftTab
+import json
 
 
 class DataVaidation():
@@ -21,7 +26,9 @@ class DataVaidation():
 
     def get_train_and_test_df(self):
         try:
-            pass
+            train_df= pd.read_csv(self.data_validation_config.train_file_path)
+            test_df= pd.read_csv(self.data_validation_config.test_file_path)
+            return train_df, test_df
 
         except Exception as e:
             raise HousingException(e, sys)   
@@ -158,12 +165,31 @@ class DataVaidation():
             if validation_status == False:
                 raise Exception("Schema of Train dataset or Test dataset is wrong")
 
-
-
             #validation_status = True
             return validation_status 
         except Exception as e:
             raise HousingException(e,sys) from e
+
+
+    def get_and_save_data_drift_report(self):
+        try:
+            profile= Profile(sections=[DataDriftProfileSection()])
+
+            train_df, test_df= self.get_train_and_test_df()
+
+            profile.calculate(train_df,train_df )     
+            report = json.loads(profile.json())
+
+            report_file_path= self.data_validation_config.report_file_path
+            report_dir= os.path.dirname(report_file_path)
+            os.makedirs(report_dir, exist_ok=True)
+
+            with open(report_file_path, "w") as report_file:
+                json.dump(report, report_file, indent=6)
+            return report
+        except Exception as e:
+            raise HousingException(e, sys) from e       
+
 
 
     def initiate_data_validation(self)-> DataValidationArtifact:
