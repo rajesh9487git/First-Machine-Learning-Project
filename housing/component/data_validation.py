@@ -188,8 +188,31 @@ class DataVaidation():
                 json.dump(report, report_file, indent=6)
             return report
         except Exception as e:
-            raise HousingException(e, sys) from e       
+            raise HousingException(e, sys) from e   
 
+
+    def save_data_drift_report_page(self):
+        try:
+            dashboard= Dashboard(tabs=[DataDriftTab()])
+            train_df, test_df= self.get_train_and_test_df() 
+            dashboard.calculate(train_df, test_df)
+
+            report_page_file_path= self.data_validation_config.report_page_file_path
+            report_page_dir= os.path.dirname(report_page_file_path)     
+            os.makedirs(report_page_dir, exist_ok=True)
+
+            dashboard.save(report_page_file_path)  
+        except Exception as e:
+            raise HousingException(e, sys) from e    
+
+
+    def is_data_drift_found(self)-> bool:
+        try:
+            report=self.get_and_save_data_drift_report()
+            self.save_data_drift_report_page()
+            return True
+        except Exception as e:
+            raise HousingException(e, sys)            
 
 
     def initiate_data_validation(self)-> DataValidationArtifact:
