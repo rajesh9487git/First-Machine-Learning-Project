@@ -221,9 +221,22 @@ class DataVaidation():
 
             self.is_train_test_file_exists()
             self.validate_dataset_schema()
+            self.is_data_drift_found()
+
+            data_validation_artifact= DataValidationArtifact(schema_file_path= self.data_validation_config.schema_file_path, 
+                                                              report_file_path=self.data_validation_config.report_file_path, 
+                                                              report_page_file_path=self.data_validation_config.report_page_file_path, 
+                                                              is_validated= True,
+                                                               message="Data validation performed successfully")
 
         except Exception as e:
             raise HousingException(e, sys) from e
+
+
+def __del__(self):
+    logging.info(f"{'>>'*30}Data validation log completed.{'<<'*30}\n\n")
+    
+                
 
 
 
