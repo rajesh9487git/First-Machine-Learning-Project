@@ -96,21 +96,14 @@ class DataVaidation():
             is_test_column_count_correct=False
             is_column_count_correct= False
 
-
-
-
             if df_columns_count==train_columns_count:
                 is_train_column_count_correct=True
             
 
-
             if df_columns_count==test_columns_count:
                 is_test_column_count_correct=True
               
-
-
             is_column_count_correct= is_train_column_count_correct and is_test_column_count_correct
-
 
             # checking the value of ocean proximity
             
@@ -235,8 +228,8 @@ class DataVaidation():
 
 def __del__(self):
     logging.info(f"{'>>'*30}Data validation log completed.{'<<'*30}\n\n")
-    
-                
+
+
 
 
 
