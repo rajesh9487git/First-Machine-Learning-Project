@@ -59,19 +59,20 @@ class Pipeline(Thread):
         except Exception as e:
             raise HousingException(e, sys) from e  
 
-    def start_data_transformation(self, 
+  
+    def start_data_transformation(self,
                                   data_ingestion_artifact: DataIngestionArtifact,
-                                  data_validation_artifact: DataValidationArtifact)-> DataTransformationArtifact:
-
+                                  data_validation_artifact: DataValidationArtifact
+                                  ) -> DataTransformationArtifact:
         try:
-            data_transformation= DataTransformation(
-                data_transformation_config= self.config.get_data_transformation_config(), 
-                data_ingestion_artifact=data_ingestion_artifact, 
-                data_validation_artifact= data_validation_artifact) 
-            return data_transformation.initiate_data_transformation()        
-
+            data_transformation = DataTransformation(
+                data_transformation_config=self.config.get_data_transformation_config(),
+                data_ingestion_artifact=data_ingestion_artifact,
+                data_validation_artifact=data_validation_artifact
+            )
+            return data_transformation.initiate_data_transformation()
         except Exception as e:
-            raise HousingException(e, sys) from e                          
+            raise HousingException(e, sys)                     
 
 
                                                     

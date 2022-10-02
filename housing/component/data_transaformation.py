@@ -142,6 +142,7 @@ class DataTransformation:
             return preprocessing
 
         except Exception as e:
+            print(e)
             raise HousingException(e,sys) from e   
 
 
