@@ -28,6 +28,33 @@ class ModelPusher:
             logging.info(f"Exporting model file: [{export_model_file_path}]")  
             os.makedirs(export_dir, exist_ok= True)
 
+            shutil.copy(src= evaluated_model_file_path, dst=export_model_file_path)
+            #we can call a function to save model to Azure blob storage/ google cloud strorage / s3 bucket
+            logging.info(
+                f"Trained model: {evaluated_model_file_path} is copied in export dir:[{export_model_file_path}]")
+
+            model_pusher_artifact= ModelPusherArtifact(is_model_pusher= True, export_model_file_path= export_model_file_path) 
+
+            logging.info(f"Model pusher artifact: [{model_pusher_artifact}]")
+
+            return model_pusher_artifact
+
+        except Exception as e:
+            raise HousingException(e, sys) from e
+
+
+    def initiate_model_pusher(self)-> ModelPusherArtifact:
+
+        try:
+            return self.export_model()
+        except Exception as e:
+            raise HousingException(e, sys) from e   
+
+
+    def __del__(self):
+        logging.info(f"{'>>' * 20}Model Pusher log completed.{'<<' * 20} ")                
+
+
             
 
 
