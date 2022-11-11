@@ -123,9 +123,18 @@ class Pipeline(Thread):
 
             experiment_id= str(uuid.uuid4())
 
-            Pipeline.experiment= Experiment(
-                
-            )
+            Pipeline.experiment = Experiment(experiment_id=experiment_id,
+                                             initialization_timestamp=self.config.time_stamp,
+                                             artifact_time_stamp=self.config.time_stamp,
+                                             running_status=True,
+                                             start_time=datetime.now(),
+                                             stop_time=None,
+                                             execution_time=None,
+                                             experiment_file_path=Pipeline.experiment_file_path,
+                                             is_model_accepted=None,
+                                             message="Pipeline has been started.",
+                                             accuracy=None,
+                                             )
                 
           
 
